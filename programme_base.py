@@ -47,7 +47,6 @@ def ask_instr():
             print("Coordonées invalides")
     return result
 
-#test
 def main():
     win = False
     loss = False
@@ -56,5 +55,5 @@ def main():
 
     taille_grille = (nb_colonnes, nb_lignes)
 
-    while not win and not loss:
+    while (not win) and (not loss):
         ask_instr()

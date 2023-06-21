@@ -1,6 +1,28 @@
 import sys
 
 
+class MineSweeper:
+    def __init__(self):
+        self.win = False
+        self.loss = False
+        self.is_playing = False
+
+    def new_game(self, taille_grille):
+        self.is_playing = True
+
+    def open(self, x, y):
+        if not self.is_playing:
+            raise Exception("La partie n'est pas en cours.")
+        else:
+            print(f"Ouvrir la case {x}, {y}")
+
+    def flag(self, x, y):
+        if not self.is_playing:
+            raise Exception("La partie n'est pas en cours.")
+        else:
+            print(f"Flagger la case {x}, {y}")
+
+
 def ask_instr():
     stop = False
     result = None
@@ -23,10 +45,9 @@ def ask_instr():
                 print("Commande invalide")
         except ValueError:
             print("Coordonées invalides")
-
     return result
 
-
+#test
 def main():
     win = False
     loss = False
@@ -37,25 +58,3 @@ def main():
 
     while not win and not loss:
         ask_instr()
-
-
-class MineSweeper:
-    def __init__(self):
-        self.win = False
-        self.loss = False
-        self.is_playing = False
-
-    def new_game(self, taille_grille):
-        self.is_playing = True
-
-    def open(self, x, y):
-        if not self.is_playing:
-            raise Exception("La partie n'est pas en cours.")
-        else:
-            print(f"Ouvrir la case {x}, {y}")
-
-    def flag(self, x, y):
-        if not self.is_playing:
-            raise Exception("La partie n'est pas en cours.")
-        else:
-            print(f"Flagger la case {x}, {y}")

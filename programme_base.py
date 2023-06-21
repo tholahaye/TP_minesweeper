@@ -9,23 +9,23 @@ def ask_instr():
     while not stop:
         instr = input("> ")
         split_instr = instr.split(" ")
+        minesweeper = MineSweeper()
         try:
             if len(split_instr) == 2:
                 x = int(split_instr[0])
                 y = int(split_instr[1])
-                result = f"Ouvrir la case {x}, {y}"
+                minesweeper.open(x, y)
                 stop = True
-            elif len(split_instr) == 3 and split_instr[0] == "F":
+            elif len(split_instr) == 3 and split_instr[0].upper() == "F":
                 x = int(split_instr[1])
                 y = int(split_instr[2])
-                result = f"Flagger la case {x}, {y}"
+                minesweeper.flag(x, y)
                 stop = True
             else:
                 print("Commande invalide")
         except ValueError:
             print("Coordonées invalides")
 
-    print(result)
     return result
 
 
@@ -34,3 +34,15 @@ def main():
     loss = False
     while not win and not loss:
         ask_instr()
+
+
+class MineSweeper:
+    def __init__(self):
+        self.win = False
+        self.loss = False
+
+    def open(self, x, y):
+        print(f"Ouvrir la case {x}, {y}")
+
+    def flag(self, x, y):
+        print(f"Flagger la case {x}, {y}")

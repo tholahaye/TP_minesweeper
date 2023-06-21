@@ -2,6 +2,7 @@ import sys
 
 print(sys.argv)
 
+
 def ask_instr():
     stop = False
     result = None
@@ -33,4 +34,3 @@ def main():
     loss = False
     while not win and not loss:
         ask_instr()
-

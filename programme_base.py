@@ -47,6 +47,7 @@ def ask_instr():
             print("Coordonées invalides")
     return result
 
+
 def main():
     win = False
     loss = False

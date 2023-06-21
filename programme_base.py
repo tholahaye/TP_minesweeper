@@ -1,7 +1,5 @@
 import sys
 
-print(sys.argv)
-
 
 def ask_instr():
     stop = False
@@ -32,6 +30,11 @@ def ask_instr():
 def main():
     win = False
     loss = False
+    nb_colonnes = sys.argv[1]
+    nb_lignes = sys.argv[2]
+
+    taille_grille = (nb_colonnes, nb_lignes)
+
     while not win and not loss:
         ask_instr()
 
@@ -40,9 +43,19 @@ class MineSweeper:
     def __init__(self):
         self.win = False
         self.loss = False
+        self.is_playing = False
+
+    def new_game(self, taille_grille):
+        self.is_playing = True
 
     def open(self, x, y):
-        print(f"Ouvrir la case {x}, {y}")
+        if not self.is_playing:
+            raise Exception("La partie n'est pas en cours.")
+        else:
+            print(f"Ouvrir la case {x}, {y}")
 
     def flag(self, x, y):
-        print(f"Flagger la case {x}, {y}")
+        if not self.is_playing:
+            raise Exception("La partie n'est pas en cours.")
+        else:
+            print(f"Flagger la case {x}, {y}")

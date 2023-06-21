@@ -32,7 +32,7 @@ def ask_instr():
 def main():
     win = False
     loss = False
-    while not win and not loss:
+    while (not win) and (not loss):
         ask_instr()
 
 

@@ -1,11 +1,11 @@
 import sys
+import grilles_et_cases as gd
+
 
 class NoneGameError(Exception):
     pass
 
-class Grid:
-    def __init__(self):
-        pass
+
 class MineSweeper:
     def __init__(self):
         self.win = False
@@ -16,7 +16,7 @@ class MineSweeper:
 
     def new_game(self, nb_colonnes=None, nb_lignes=None):
         self.is_playing = True
-        grille = Grid()
+        grille = gd.Grid()
         if nb_colonnes is not None:
             self.nb_colonnes = nb_colonnes
         if nb_lignes is not None:

@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import random as rd
 
 
 class Grid:
@@ -12,6 +13,11 @@ class Grid:
                 row.append(TileHint(self, x, y))
             self._tiles.append(row)
 #            self._tiles[y][x] pour trouver TileHint(..., x, y)
+        self.PC_MINES = 10
+        all_coord = [(i, j) for i in range(self.nb_colonnes) for j in range(self.nb_lignes)]
+        nb_mines = max(round(len(all_coord) * self.PC_MINES / 100), 1)  # at least one mine
+        self._mines_coord = (rd.sample(all_coord, nb_mines))
+
 
 class Tile(ABC):
     def __init__(self, grid, x, y):

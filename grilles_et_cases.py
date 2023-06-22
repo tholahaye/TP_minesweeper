@@ -13,9 +13,9 @@ class Grid:
                 row.append(TileHint(self, i, j))
             self._tiles.append(row)
         self.PC_MINES = 10
-        all_coord = [(i, j) for i in range(self.nb_colonnes) for j in range(self.nb_lignes)]
-        nb_mines = max(round(len(all_coord) * self.PC_MINES / 100), 1)  # at least one mine
-        self._mines_coord = (rd.sample(all_coord, nb_mines))
+        self.all_coord = [(i, j) for i in range(self.nb_colonnes) for j in range(self.nb_lignes)]
+        nb_mines = max(round(len(self.all_coord) * self.PC_MINES / 100), 1)  # at least one mine
+        self._mines_coord = (rd.sample(self.all_coord, nb_mines))
         for j in range(nb_lignes):
             for i in range(nb_colonnes):
                 if (i, j) in self._mines_coord:
@@ -56,7 +56,18 @@ class TileMine(Tile):
 class TileHint(Tile):
     def __init__(self, grid, x, y):
         super().__init__(grid, x, y)
-        self.hint = 0
+
+    @property
+    def hint(self):
+        count = 0
+        x = self._x
+        y = self._y
+        coord_around = {(i, j) for i in range(x - 1, x + 2) for j in range(y - 1, y + 2)}
+        coord_around = set(self._grid.all_coord) & coord_around
+        for x, y in coord_around:
+            if isinstance(self._grid.get_tile(x, y), TileMine):
+                count += 1
+        return count
 
     def __str__(self):
         if not self.is_open:

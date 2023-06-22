@@ -13,17 +13,14 @@ class Grid:
                 row.append(TileHint(self, x, y))
             self._tiles.append(row)
 #            self._tiles[y][x] pour trouver TileHint(..., x, y)
-        print(self._tiles)
-        self.PC_MINES = 50
+        self.PC_MINES = 10
         all_coord = [(i, j) for i in range(self.nb_colonnes) for j in range(self.nb_lignes)]
         nb_mines = max(round(len(all_coord) * self.PC_MINES / 100), 1)  # at least one mine
         self._mines_coord = (rd.sample(all_coord, nb_mines))
-        print(self._mines_coord)
         for y in range(nb_lignes):
             for x in range(nb_colonnes):
                 if (x, y) in self._mines_coord:
                     self._tiles[y][x] = TileMine(self, x, y)
-        print(self._tiles)
 
 
 class Tile(ABC):

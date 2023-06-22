@@ -13,6 +13,7 @@ class Tile(ABC):
         self._y = y
         self.is_open = False
         self.is_flagged = False
+        self.nb_mines_adj = None
 
     @abstractmethod
     def __str__(self):
@@ -25,10 +26,23 @@ class Tile(ABC):
 
 
 class TileMine(Tile):
-    pass
+    def __init__(self, grid, x, y):
+        super().__init__(self, grid, x, y)
+
+    def __str__(self):
+        if not self.is_open:
+            return super().__str__()
+        return "O"
 
 
 class TileHint(Tile):
     def __init__(self, grid, x, y):
         super().__init__(self, grid, x, y)
         self.hint = 0
+
+    def __str__(self):
+        if not self.is_open:
+            return super().__str__()
+        if self.hint == 0:
+            return " "
+        return str(self.hint)

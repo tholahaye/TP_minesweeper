@@ -7,20 +7,22 @@ class Grid:
         self.nb_colonnes = nb_colonnes
         self.nb_lignes = nb_lignes
         self._tiles = []
-        for y in range(nb_lignes):
+        for j in range(nb_lignes):
             row = []
-            for x in range(nb_colonnes):
-                row.append(TileHint(self, x, y))
+            for i in range(nb_colonnes):
+                row.append(TileHint(self, i, j))
             self._tiles.append(row)
-#            self._tiles[y][x] pour trouver TileHint(..., x, y)
         self.PC_MINES = 10
         all_coord = [(i, j) for i in range(self.nb_colonnes) for j in range(self.nb_lignes)]
         nb_mines = max(round(len(all_coord) * self.PC_MINES / 100), 1)  # at least one mine
         self._mines_coord = (rd.sample(all_coord, nb_mines))
-        for y in range(nb_lignes):
-            for x in range(nb_colonnes):
-                if (x, y) in self._mines_coord:
-                    self._tiles[y][x] = TileMine(self, x, y)
+        for j in range(nb_lignes):
+            for i in range(nb_colonnes):
+                if (i, j) in self._mines_coord:
+                    self._tiles[j][i] = TileMine(self, i, j)
+
+    def get_tile(self, x, y):
+        return self._tiles[y][x]
 
 
 class Tile(ABC):

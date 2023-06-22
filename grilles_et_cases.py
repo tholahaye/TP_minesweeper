@@ -2,9 +2,16 @@ from abc import ABC, abstractmethod
 
 
 class Grid:
-    def __init__(self):
-        pass
-
+    def __init__(self, nb_colonnes, nb_lignes):
+        self.nb_colonnes = nb_colonnes
+        self.nb_lignes = nb_lignes
+        self._tiles = []
+        for y in range(nb_lignes):
+            row = []
+            for x in range(nb_colonnes):
+                row.append(TileHint(self, x, y))
+            self._tiles.append(row)
+#            self._tiles[y][x] pour trouver TileHint(..., x, y)
 
 class Tile(ABC):
     def __init__(self, grid, x, y):

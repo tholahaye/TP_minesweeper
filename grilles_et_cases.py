@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
 import random as rd
 
+
 class OpenedError(Exception):
     pass
+
 
 class FlaggedError(Exception):
     pass
@@ -13,7 +15,6 @@ class Grid:
         self.nb_colonnes = nb_colonnes
         self.nb_lignes = nb_lignes
         self._tiles = []
-        self.remaining = 0
         self.nb_wrong_flagged = 0
         for j in range(nb_lignes):
             row = []
@@ -24,16 +25,13 @@ class Grid:
         all_coord = [(i, j) for i in range(self.nb_colonnes) for j in range(self.nb_lignes)]
         nb_mines = max(round(len(all_coord) * self.PC_MINES / 100), 1)  # at least one mine
         self._mines_coord = (rd.sample(all_coord, nb_mines))
-        self.nb_mines_not_flagged = len(self._mines_coord)
         self.all_coord = set(all_coord)
+        self.remaining = nb_colonnes * nb_lignes - len(self._mines_coord)
+
         for j in range(nb_lignes):
             for i in range(nb_colonnes):
                 if (i, j) in self._mines_coord:
                     self._tiles[j][i] = TileMine(self, i, j)
-        for j in range(nb_lignes):
-            for i in range(nb_colonnes):
-                if not self.get_tile(i, j).is_open:
-                    self.remaining += 1
 
     def get_tile(self, x, y):
         return self._tiles[y][x]
@@ -64,24 +62,19 @@ class Grid:
         else:
             if isinstance(self.get_tile(x, y), TileMine):
                 self.open_mine = True
+            else:
+                self.remaining -= 1
             self._tiles[y][x].is_open = True
-            self.remaining += -1
 
     def toggle_flag(self, x, y):
         if self._tiles[y][x].is_open:
             raise OpenedError
         elif self._tiles[y][x].is_flagged:
             self._tiles[y][x].is_flagged = False
-            if isinstance(self.get_tile(x, y), TileMine):
-                self.nb_mines_not_flagged += 1
-            if isinstance(self.get_tile(x, y), TileHint):
-                self.nb_wrong_flagged += -1
         else:
-            if isinstance(self.get_tile(x, y), TileMine):
-                self.nb_mines_not_flagged += -1
-            if isinstance(self.get_tile(x, y), TileHint):
-                self.nb_wrong_flagged += 1
             self._tiles[y][x].is_flagged = True
+
+
 
 
 class Tile(ABC):

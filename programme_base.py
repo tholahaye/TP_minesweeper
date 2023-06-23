@@ -28,18 +28,14 @@ class MineSweeper:
         print(f"La grille comporte {self.nb_colonnes} colonnes et {self.nb_lignes} lignes.")
 
     def is_win(self):
-        if self.grille.nb_mines_not_flagged == 0 and self.grille.nb_wrong_flagged == 0:
+        if self.grille.remaining == 0:
             print("Bravo ! Vous avez gagné")
-            return True
-        else:
-            return False
+            self.is_playing = False
 
     def is_lost(self):
         if self.grille.open_mine:
             print("Vous avez perdu !")
-            return True
-        else:
-            return False
+            self.is_playing = False
 
     def open(self, x, y):
         if not self.is_playing:
@@ -82,14 +78,13 @@ def ask_instr(minesweeper):
                 x = int(split_instr[0])
                 y = int(split_instr[1])
                 minesweeper.open(x, y)
+                minesweeper.is_lost()
+                minesweeper.is_win()
                 return False
             elif len(split_instr) == 3 and split_instr[0].upper() == "F":
                 x = int(split_instr[1])
                 y = int(split_instr[2])
                 minesweeper.flag(x, y)
-                if minesweeper.is_win():
-                    return True
-                return False
             else:
                 print("Commande invalide")
         except ValueError:

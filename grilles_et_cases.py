@@ -56,11 +56,14 @@ class Grid:
         return res
 
     def open(self, x, y):
+        self.open_mine = False
         if self._tiles[y][x].is_open:
             raise OpenedError
         elif self._tiles[y][x].is_flagged:
             raise FlaggedError
         else:
+            if isinstance(self.get_tile(x, y), TileMine):
+                self.open_mine = True
             self._tiles[y][x].is_open = True
             self.remaining += -1
 
@@ -68,7 +71,11 @@ class Grid:
         if self._tiles[y][x].is_open:
             raise OpenedError
         elif self._tiles[y][x].is_flagged:
-            raise FlaggedError
+            self._tiles[y][x].is_flagged = False
+            if isinstance(self.get_tile(x, y), TileMine):
+                self.nb_mines_not_flagged += 1
+            if isinstance(self.get_tile(x, y), TileHint):
+                self.nb_wrong_flagged += -1
         else:
             if isinstance(self.get_tile(x, y), TileMine):
                 self.nb_mines_not_flagged += -1

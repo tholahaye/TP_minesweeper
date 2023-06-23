@@ -34,6 +34,13 @@ class MineSweeper:
         else:
             return False
 
+    def is_lost(self):
+        if self.grille.open_mine:
+            print("Vous avez perdu !")
+            return True
+        else:
+            return False
+
     def open(self, x, y):
         if not self.is_playing:
             raise NoneGameError

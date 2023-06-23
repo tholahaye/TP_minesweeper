@@ -55,6 +55,14 @@ class Grid:
         else:
             self._tiles[y][x].is_open = True
 
+    def toggle_flag(self, x, y):
+        if self._tiles[y][x].is_open:
+            raise OpenedError
+        elif self._tiles[y][x].is_flagged:
+            raise FlaggedError
+        else:
+            self._tiles[y][x].is_flagged = True
+
 
 class Tile(ABC):
     def __init__(self, grid, x, y):

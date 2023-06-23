@@ -42,6 +42,10 @@ class MineSweeper:
             raise NoneGameError
         else:
             print(f"Flagger la case {x}, {y}")
+            if (x, y) not in self.grille.all_coord:
+                raise OutGridError
+            else:
+                self.grille.toggle_flag(x, y)
 
 
 def ask_instr(minesweeper):

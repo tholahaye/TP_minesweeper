@@ -57,18 +57,24 @@ class TileMine(Tile):
 class TileHint(Tile):
     def __init__(self, grid, x, y):
         super().__init__(grid, x, y)
+        self._hint = None
 
     @property
     def hint(self):
-        count = 0
-        x = self._x
-        y = self._y
-        coord_around = {(i, j) for i in range(x - 1, x + 2) for j in range(y - 1, y + 2)}
-        coord_around = self._grid.all_coord & coord_around
-        for x, y in coord_around:
-            if isinstance(self._grid.get_tile(x, y), TileMine):
-                count += 1
-        return count
+        tmp = self._hint
+        if tmp is None:
+            count = 0
+            x = self._x
+            y = self._y
+            coord_around = {(i, j) for i in range(x - 1, x + 2) for j in range(y - 1, y + 2)}
+            coord_around = self._grid.all_coord & coord_around
+            for x, y in coord_around:
+                if isinstance(self._grid.get_tile(x, y), TileMine):
+                    count += 1
+            self._hint = count
+            return count
+        else:
+            return self._hint
 
     def __str__(self):
         if not self.is_open:

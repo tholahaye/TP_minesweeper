@@ -16,12 +16,12 @@ class MineSweeper:
 
     def new_game(self, nb_colonnes=None, nb_lignes=None):
         self.is_playing = True
-        grille = gd.Grid()
         if nb_colonnes is not None:
             self.nb_colonnes = nb_colonnes
         if nb_lignes is not None:
             self.nb_lignes = nb_lignes
-        print(f"La grille est de {self.nb_colonnes} colonnes et {self.nb_lignes} lignes.")
+        grille = gd.Grid(nb_colonnes=self.nb_colonnes, nb_lignes=nb_lignes)
+        print(f"La grille comporte {self.nb_colonnes} colonnes et {self.nb_lignes} lignes.")
 
     def open(self, x, y):
         if not self.is_playing:

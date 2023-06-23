@@ -1,3 +1,4 @@
+# pylint: disable=invalid-name
 import sys
 import grilles_et_cases as gd
 
@@ -17,6 +18,7 @@ class MineSweeper:
         self.is_playing = False
         self.nb_colonnes = int(sys.argv[1])
         self.nb_lignes = int(sys.argv[2])
+        self.grille = gd.Grid(nb_colonnes=self.nb_colonnes, nb_lignes=self.nb_lignes)
 
     def new_game(self, nb_colonnes=None, nb_lignes=None):
         self.is_playing = True
@@ -24,7 +26,6 @@ class MineSweeper:
             self.nb_colonnes = nb_colonnes
         if nb_lignes is not None:
             self.nb_lignes = nb_lignes
-        self.grille = gd.Grid(nb_colonnes=self.nb_colonnes, nb_lignes=self.nb_lignes)
         print(f"La grille comporte {self.nb_colonnes} colonnes et {self.nb_lignes} lignes.")
 
     def is_win(self):
@@ -49,12 +50,10 @@ class MineSweeper:
     def flag(self, x, y):
         if not self.is_playing:
             raise NoneGameError()
-        else:
-            print(f"Flagger la case {x}, {y}")
-            if (x, y) not in self.grille.all_coord:
-                raise OutGridError()
-            else:
-                self.grille.toggle_flag(x, y)
+        print(f"Flagger la case {x}, {y}")
+        if (x, y) not in self.grille.all_coord:
+            raise OutGridError()
+        self.grille.toggle_flag(x, y)
 
 
 def ask_instr(minesweeper):
@@ -64,23 +63,23 @@ def ask_instr(minesweeper):
         instr = input("> ")
         split_instr = instr.split(" ")
         try:
-            if split_instr[0].upper() == "QUIT":
+            if split_instr[0].upper() == "QUIT":  # pylint: disable=magic-value-comparison
                 return True
-            elif split_instr[0].upper() == "NEWGAME":
-                if len(split_instr) == 3:
+            if split_instr[0].upper() == "NEWGAME":  # pylint: disable=magic-value-comparison
+                if len(split_instr) == 3:  # pylint: disable=magic-value-comparison
                     minesweeper.new_game(int(split_instr[1]), int(split_instr[2]))
                 elif len(split_instr) == 1:
                     minesweeper.new_game()
                 else:
                     print("Commande invalide")
-            elif len(split_instr) == 2:
+            elif len(split_instr) == 2:  # pylint: disable=magic-value-comparison
                 x = int(split_instr[0])
                 y = int(split_instr[1])
                 minesweeper.open(x, y)
                 minesweeper.is_lost()
                 minesweeper.is_win()
                 return False
-            elif len(split_instr) == 3 and split_instr[0].upper() == "F":
+            elif len(split_instr) == 3 and split_instr[0].upper() == "F":  # pylint: disable=magic-value-comparison
                 x = int(split_instr[1])
                 y = int(split_instr[2])
                 minesweeper.flag(x, y)

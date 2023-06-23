@@ -1,4 +1,3 @@
-# pylint: disable=invalid-name
 from abc import ABC, abstractmethod
 import random as rd
 
@@ -25,7 +24,7 @@ class Grid:
         self.PC_MINES = 10
         all_coord = [(i, j) for i in range(self.nb_colonnes) for j in range(self.nb_lignes)]
         nb_mines = max(round(len(all_coord) * self.PC_MINES / 100), 1)  # at least one mine
-        self._mines_coord = (rd.sample(all_coord, nb_mines))
+        self._mines_coord = rd.sample(all_coord, nb_mines)
         self.all_coord = set(all_coord)
         self.remaining = nb_colonnes * nb_lignes - len(self._mines_coord)
 
@@ -71,10 +70,9 @@ class Grid:
     def toggle_flag(self, x, y):
         if self._tiles[y][x].is_open:
             raise OpenedError
-        elif self._tiles[y][x].is_flagged:
+        if self._tiles[y][x].is_flagged:
             self._tiles[y][x].is_flagged = False
-        else:
-            self._tiles[y][x].is_flagged = True
+        self._tiles[y][x].is_flagged = True
 
 
 class Tile(ABC):
@@ -99,15 +97,13 @@ class Tile(ABC):
         self._grid.remaining -= 1
 
 
-
-
 class TileMine(Tile):
     def __init__(self, grid, x, y):
         super().__init__(grid, x, y)
 
     def __str__(self):
         if not self.is_open:
-            return super().__str__()
+            return self.__str__()
         return "O"
 
 
@@ -124,7 +120,6 @@ class TileHint(Tile):
             coord_around = {(i, j) for i in range(x - 1, x + 2) for j in range(y - 1, y + 2)}
             coord_around = self._grid.all_coord & coord_around
             for coord_voisin in coord_around:
-                #self._grid.get_tile(coord_voisin[0], coord_voisin[1])._open_full
                 self._grid._open_full(coord_voisin[0], coord_voisin[1])
 
     @property
@@ -141,7 +136,6 @@ class TileHint(Tile):
                 count += 1
         self._hint = count
         return count
-
 
     def __str__(self):
         if not self.is_open:

@@ -64,7 +64,11 @@ class Grid:
                 self.open_mine = True
             else:
                 self.remaining -= 1
+            self._open_full(x, y)
             self._tiles[y][x].is_open = True
+
+    def _open_full(self, x, y):
+        self._tiles[x][y].open()
 
     def toggle_flag(self, x, y):
         if self._tiles[y][x].is_open:
@@ -73,8 +77,6 @@ class Grid:
             self._tiles[y][x].is_flagged = False
         else:
             self._tiles[y][x].is_flagged = True
-
-
 
 
 class Tile(ABC):
@@ -93,6 +95,10 @@ class Tile(ABC):
             return "#"
         else:
             raise NotImplementedError
+
+    def open(self):
+        pass
+        
 
 
 class TileMine(Tile):

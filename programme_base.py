@@ -105,6 +105,5 @@ def main():
     should_quit = False
     minesweeper = MineSweeper()
 
-
     while (not win) and (not loss) and not should_quit:
         should_quit = ask_instr(minesweeper)

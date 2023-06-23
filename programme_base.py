@@ -5,6 +5,7 @@ import grilles_et_cases as gd
 class NoneGameError(Exception):
     pass
 
+
 class OutGridError(Exception):
     pass
 
@@ -34,7 +35,7 @@ class MineSweeper:
             if (x, y) not in self.grille.all_coord:
                 raise OutGridError
             else:
-                self.grille.open(x , y)
+                self.grille.open(x, y)
 
     def flag(self, x, y):
         if not self.is_playing:
@@ -75,6 +76,12 @@ def ask_instr(minesweeper):
             print("Coordonées invalides")
         except NoneGameError:
             print("La partie n'est pas en cours. Veuillez démarrer une partie.")
+        except gd.OpenedError:
+            print("La case que vous voulez ouvrir est déjà ouverte.")
+        except gd.FlaggedError:
+            print("La case que vous voulez ouvrir est déjà flaggée.")
+        except OutGridError:
+            print("La case que vous voulez ouvrir est hors de la grille.")
 
 
 def main():
@@ -86,7 +93,3 @@ def main():
 
     while (not win) and (not loss) and not should_quit:
         should_quit = ask_instr(minesweeper)
-
-
-
-main()

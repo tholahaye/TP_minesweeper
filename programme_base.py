@@ -20,7 +20,7 @@ class MineSweeper:
             self.nb_colonnes = nb_colonnes
         if nb_lignes is not None:
             self.nb_lignes = nb_lignes
-        grille = gd.Grid(nb_colonnes=self.nb_colonnes, nb_lignes=nb_lignes)
+        self.grille = gd.Grid(nb_colonnes=self.nb_colonnes, nb_lignes=self.nb_lignes)
         print(f"La grille comporte {self.nb_colonnes} colonnes et {self.nb_lignes} lignes.")
 
     def open(self, x, y):
@@ -38,6 +38,8 @@ class MineSweeper:
 
 def ask_instr(minesweeper):
     while True:
+        if minesweeper.is_playing:
+            print(str(minesweeper.grille))
         instr = input("> ")
         split_instr = instr.split(" ")
         try:
@@ -74,5 +76,10 @@ def main():
     should_quit = False
     minesweeper = MineSweeper()
 
+
     while (not win) and (not loss) and not should_quit:
         should_quit = ask_instr(minesweeper)
+
+
+
+main()

@@ -25,6 +25,22 @@ class Grid:
     def get_tile(self, x, y):
         return self._tiles[y][x]
 
+    def __str__(self):
+        res = "  "
+        for i in range(self.nb_colonnes):
+            res += " " + str(i)
+        res += "\n"
+        res += "  "
+        for i in range(self.nb_colonnes):
+            res += " _"
+        res += "\n"
+        for j in range(self.nb_lignes):
+            res += str(j) + "|"
+            for i in range(self.nb_colonnes):
+                res += " " + str(self.get_tile(i, j))
+            res += str("\n")
+        return res
+
 
 class Tile(ABC):
     def __init__(self, grid, x, y):

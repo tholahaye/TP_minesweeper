@@ -27,6 +27,13 @@ class MineSweeper:
         self.grille = gd.Grid(nb_colonnes=self.nb_colonnes, nb_lignes=self.nb_lignes)
         print(f"La grille comporte {self.nb_colonnes} colonnes et {self.nb_lignes} lignes.")
 
+    def is_win(self):
+        if self.grille.nb_mines_not_flagged == 0 and self.grille.nb_wrong_flagged == 0:
+            print("Bravo ! Vous avez gagné")
+            return True
+        else:
+            return False
+
     def open(self, x, y):
         if not self.is_playing:
             raise NoneGameError
@@ -73,6 +80,8 @@ def ask_instr(minesweeper):
                 x = int(split_instr[1])
                 y = int(split_instr[2])
                 minesweeper.flag(x, y)
+                if minesweeper.is_win():
+                    return True
                 return False
             else:
                 print("Commande invalide")

@@ -14,6 +14,7 @@ class Grid:
         self.nb_lignes = nb_lignes
         self._tiles = []
         self.remaining = 0
+        self.nb_wrong_flagged = 0
         for j in range(nb_lignes):
             row = []
             for i in range(nb_colonnes):
@@ -23,6 +24,7 @@ class Grid:
         all_coord = [(i, j) for i in range(self.nb_colonnes) for j in range(self.nb_lignes)]
         nb_mines = max(round(len(all_coord) * self.PC_MINES / 100), 1)  # at least one mine
         self._mines_coord = (rd.sample(all_coord, nb_mines))
+        self.nb_mines_not_flagged = len(self._mines_coord)
         self.all_coord = set(all_coord)
         for j in range(nb_lignes):
             for i in range(nb_colonnes):
@@ -68,6 +70,10 @@ class Grid:
         elif self._tiles[y][x].is_flagged:
             raise FlaggedError
         else:
+            if isinstance(self.get_tile(x, y), TileMine):
+                self.nb_mines_not_flagged += -1
+            if isinstance(self.get_tile(x, y), TileHint):
+                self.nb_wrong_flagged += 1
             self._tiles[y][x].is_flagged = True
 
 

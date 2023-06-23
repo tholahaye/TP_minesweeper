@@ -39,21 +39,20 @@ class MineSweeper:
 
     def open(self, x, y):
         if not self.is_playing:
-            raise NoneGameError
-        else:
-            print(f"Ouvrir la case {x}, {y}")
-            if (x, y) not in self.grille.all_coord:
-                raise OutGridError
-            else:
-                self.grille.open(x, y)
+            raise NoneGameError()
+        print(f"Ouvrir la case {x}, {y}")
+        if (x, y) not in self.grille.all_coord:
+            raise OutGridError()
+
+        self.grille.open(x, y)
 
     def flag(self, x, y):
         if not self.is_playing:
-            raise NoneGameError
+            raise NoneGameError()
         else:
             print(f"Flagger la case {x}, {y}")
             if (x, y) not in self.grille.all_coord:
-                raise OutGridError
+                raise OutGridError()
             else:
                 self.grille.toggle_flag(x, y)
 

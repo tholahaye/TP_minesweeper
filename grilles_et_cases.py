@@ -15,7 +15,7 @@ class Grid:
         self.nb_colonnes = nb_colonnes
         self.nb_lignes = nb_lignes
         self._tiles = []
-        self.nb_wrong_flagged = 0
+        self.open_mine = False
         for j in range(nb_lignes):
             row = []
             for i in range(nb_colonnes):
@@ -54,21 +54,18 @@ class Grid:
         return res
 
     def open(self, x, y):
-        self.open_mine = False
         if self._tiles[y][x].is_open:
             raise OpenedError
-        elif self._tiles[y][x].is_flagged:
+        if self._tiles[y][x].is_flagged:
             raise FlaggedError
-        else:
-            if isinstance(self.get_tile(x, y), TileMine):
-                self.open_mine = True
-            else:
-                self.remaining -= 1
-            self._open_full(x, y)
-            self._tiles[y][x].is_open = True
+        if isinstance(self.get_tile(x, y), TileMine):
+            self.open_mine = True
+        self._open_full(x, y)
 
     def _open_full(self, x, y):
-        self._tiles[x][y].open()
+        if self._tiles[y][x].is_open:
+            return
+        self._tiles[y][x].open()
 
     def toggle_flag(self, x, y):
         if self._tiles[y][x].is_open:
@@ -97,8 +94,10 @@ class Tile(ABC):
             raise NotImplementedError
 
     def open(self):
-        pass
-        
+        self.is_open = True
+        self._grid.remaining -= 1
+
+
 
 
 class TileMine(Tile):
@@ -116,22 +115,32 @@ class TileHint(Tile):
         super().__init__(grid, x, y)
         self._hint = None
 
-    @property
-    def hint(self):
-        tmp = self._hint
-        if tmp is None:
-            count = 0
+    def open(self):
+        super().open()
+        if self.hint == 0:
             x = self._x
             y = self._y
             coord_around = {(i, j) for i in range(x - 1, x + 2) for j in range(y - 1, y + 2)}
             coord_around = self._grid.all_coord & coord_around
-            for x, y in coord_around:
-                if isinstance(self._grid.get_tile(x, y), TileMine):
-                    count += 1
-            self._hint = count
-            return count
-        else:
+            for coord_voisin in coord_around:
+                #self._grid.get_tile(coord_voisin[0], coord_voisin[1])._open_full
+                self._grid._open_full(coord_voisin[0], coord_voisin[1])
+
+    @property
+    def hint(self):
+        if self._hint is not None:
             return self._hint
+        count = 0
+        x = self._x
+        y = self._y
+        coord_around = {(i, j) for i in range(x - 1, x + 2) for j in range(y - 1, y + 2)}
+        coord_around = self._grid.all_coord & coord_around
+        for x, y in coord_around:
+            if isinstance(self._grid.get_tile(x, y), TileMine):
+                count += 1
+        self._hint = count
+        return count
+
 
     def __str__(self):
         if not self.is_open:

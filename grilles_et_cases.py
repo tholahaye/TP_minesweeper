@@ -13,6 +13,7 @@ class Grid:
         self.nb_colonnes = nb_colonnes
         self.nb_lignes = nb_lignes
         self._tiles = []
+        self.remaining = 0
         for j in range(nb_lignes):
             row = []
             for i in range(nb_colonnes):
@@ -27,11 +28,16 @@ class Grid:
             for i in range(nb_colonnes):
                 if (i, j) in self._mines_coord:
                     self._tiles[j][i] = TileMine(self, i, j)
+        for j in range(nb_lignes):
+            for i in range(nb_colonnes):
+                if not self.get_tile(i, j).is_open:
+                    self.remaining += 1
 
     def get_tile(self, x, y):
         return self._tiles[y][x]
 
     def __str__(self):
+        print(f"{self.remaining} cases restantes")
         res = "  "
         for i in range(self.nb_colonnes):
             res += " " + str(i)
@@ -54,6 +60,7 @@ class Grid:
             raise FlaggedError
         else:
             self._tiles[y][x].is_open = True
+            self.remaining += -1
 
     def toggle_flag(self, x, y):
         if self._tiles[y][x].is_open:

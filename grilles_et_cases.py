@@ -1,6 +1,12 @@
 from abc import ABC, abstractmethod
 import random as rd
 
+class OpenedError(Exception):
+    pass
+
+class FlaggedError(Exception):
+    pass
+
 
 class Grid:
     def __init__(self, nb_colonnes, nb_lignes):
@@ -40,6 +46,14 @@ class Grid:
                 res += " " + str(self.get_tile(i, j))
             res += str("\n")
         return res
+
+    def open(self, x, y):
+        if self._tiles[y][x].is_open:
+            raise OpenedError
+        elif self._tiles[y][x].is_flagged:
+            raise FlaggedError
+        else:
+            self._tiles[y][x].is_open = True
 
 
 class Tile(ABC):

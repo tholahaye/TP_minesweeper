@@ -5,6 +5,9 @@ import grilles_et_cases as gd
 class NoneGameError(Exception):
     pass
 
+class OutGridError(Exception):
+    pass
+
 
 class MineSweeper:
     def __init__(self):
@@ -28,6 +31,10 @@ class MineSweeper:
             raise NoneGameError
         else:
             print(f"Ouvrir la case {x}, {y}")
+            if (x, y) not in self.grille.all_coord:
+                raise OutGridError
+            else:
+                self.grille.open(x , y)
 
     def flag(self, x, y):
         if not self.is_playing:
